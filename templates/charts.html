@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafiklar</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { text-align: center; color: #ee5a24; margin-bottom: 30px; }
+        .scores {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .score-box {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border-top: 4px solid #ee5a24;
+        }
+        .score-number { font-size: 32px; font-weight: bold; color: #ee5a24; }
+        .score-label { font-size: 12px; color: #888; margin-top: 5px; }
+        .chart-box {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .chart-box h3 { color: #ee5a24; margin-bottom: 15px; font-size: 16px; }
+        .chart-box img { width: 100%; border-radius: 10px; }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📊 Grafiklar va Statistika</h1>
+
+    <div class="scores">
+        {% for name, score in scores.items() %}
+        <div class="score-box">
+            <div class="score-number">{{ score }}%</div>
+            <div class="score-label">{{ name }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="chart-box">
+        <h3>🤖 Modellar Taqqoslash</h3>
+        <img src="/static/model_chart.png" alt="Modellar taqqoslash">
+    </div>
+
+    <div class="chart-box">
+        <h3>🫀 Bemorlar Taqsimoti</h3>
+        <img src="/static/disease_chart.png" alt="Kasallik taqsimoti">
+    </div>
+
+    <div class="buttons">
+        <a href="/" class="btn btn-primary">🔄 Yangi tekshirish</a>
+        <a href="/history" class="btn btn-secondary">📋 Tarix</a>
+    </div>
+</div>
+</body>
+</html>

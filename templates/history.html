@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bemor Tarixi</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { text-align: center; color: #ee5a24; margin-bottom: 30px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        tr:hover { background: #fff5f5; }
+        .badge-danger {
+            background: #ffe0e0;
+            color: #c0392b;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .badge-safe {
+            background: #e0ffe0;
+            color: #27ae60;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .empty {
+            text-align: center;
+            color: #888;
+            padding: 40px;
+            font-size: 16px;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn:hover { opacity: 0.9; }
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-box {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .stat-number { font-size: 28px; font-weight: bold; color: #ee5a24; }
+        .stat-label { font-size: 12px; color: #888; margin-top: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📋 Bemor Tarixi</h1>
+
+    {% if history %}
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-number">{{ history|length }}</div>
+            <div class="stat-label">Jami tekshiruv</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" style="color:#c0392b">
+                {{ history | selectattr('natija', 'equalto', 'XAVF BOR') | list | length }}
+            </div>
+            <div class="stat-label">Xavfli holatlar</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" style="color:#27ae60">
+                {{ history | selectattr('natija', 'equalto', 'SOGLOM') | list | length }}
+            </div>
+            <div class="stat-label">Soglom holatlar</div>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Sana</th>
+                <th>Yosh</th>
+                <th>Jins</th>
+                <th>Natija</th>
+                <th>Aniqlik</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in history %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ item.sana }}</td>
+                <td>{{ item.yosh }}</td>
+                <td>{{ item.jins }}</td>
+                <td>
+                    {% if item.natija == 'XAVF BOR' %}
+                        <span class="badge-danger">⚠️ XAVF BOR</span>
+                    {% else %}
+                        <span class="badge-safe">✅ SOGLOM</span>
+                    {% endif %}
+                </td>
+                <td>{{ item.aniqlik }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty">
+        😕 Hali hech qanday tekshiruv yo'q!
+    </div>
+    {% endif %}
+
+    <div class="buttons">
+        <a href="/" class="btn btn-primary">🔄 Yangi tekshirish</a>
+        <a href="/charts" class="btn btn-secondary">📊 Grafiklar</a>
+    </div>
+</div>
+</body>
+</html>

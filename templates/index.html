@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CardioAI - Yurak Sog'ligi Tizimi</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #333333;
+            --card: #f9f9f9;
+            --border: #eeeeee;
+            --primary: #ee5a24;
+            --primary2: #ff6b6b;
+            --nav-bg: #ffffff;
+            --shadow: rgba(0,0,0,0.1);
+        }
+        [data-theme="dark"] {
+            --bg: #1a1a2e;
+            --text: #e0e0e0;
+            --card: #16213e;
+            --border: #0f3460;
+            --nav-bg: #16213e;
+            --shadow: rgba(0,0,0,0.4);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        /* NAV */
+        nav {
+            background: var(--nav-bg);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo { font-size: 24px; font-weight: bold; color: var(--primary); }
+        .logo span { color: var(--text); }
+        .nav-links { display: flex; gap: 25px; list-style: none; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-right { display: flex; gap: 15px; align-items: center; }
+        .lang-btn, .dark-btn {
+            padding: 6px 14px;
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .lang-btn:hover, .dark-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            padding: 100px 40px;
+            text-align: center;
+            color: white;
+        }
+        .hero h1 { font-size: 52px; margin-bottom: 20px; }
+        .hero p { font-size: 20px; opacity: 0.9; margin-bottom: 40px; }
+        .hero-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn-white {
+            padding: 15px 35px;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-outline {
+            padding: 15px 35px;
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-white:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .btn-outline:hover { background: white; color: var(--primary); }
+
+        /* SECTIONS */
+        section { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .section-sub {
+            text-align: center;
+            color: #888;
+            margin-bottom: 50px;
+            font-size: 16px;
+        }
+
+        /* BO'LIM 1: SABAB */
+        .causes-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+        .cause-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .cause-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow);
+            border-color: var(--primary);
+        }
+        .cause-icon { font-size: 28px; margin-bottom: 8px; }
+        .cause-num { font-size: 11px; color: var(--primary); font-weight: bold; }
+        .cause-name { font-size: 12px; color: var(--text); margin-top: 5px; }
+
+        /* BO'LIM 2: TEST */
+        .test-container {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px var(--shadow);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .form-group { display: flex; flex-direction: column; }
+        label { font-size: 13px; color: #888; margin-bottom: 6px; font-weight: 600; }
+        input, select {
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            background: var(--bg);
+            color: var(--text);
+            transition: border 0.3s;
+        }
+        input:focus, select:focus { border-color: var(--primary); outline: none; }
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(238,90,36,0.4); }
+
+        /* BO'LIM 3: STATISTIKA */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .chart-card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px var(--shadow);
+        }
+        .chart-card h3 { color: var(--primary); margin-bottom: 15px; }
+        .chart-card img { width: 100%; border-radius: 10px; }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .history-table th {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 12px;
+            font-size: 13px;
+        }
+        .history-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text);
+        }
+        .history-table tr:hover { background: var(--card); }
+        .badge-danger {
+            background: #ffe0e0; color: #c0392b;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: bold;
+        }
+        .badge-safe {
+            background: #e0ffe0; color: #27ae60;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: bold;
+        }
+
+        /* BO'LIM 4: DOCTOR COACH */
+        .coach-container {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px var(--shadow);
+        }
+        .chat-box {
+            height: 350px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: var(--bg);
+        }
+        .msg { margin-bottom: 15px; display: flex; gap: 10px; }
+        .msg.user { flex-direction: row-reverse; }
+        .msg-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .msg.bot .msg-bubble { background: linear-gradient(135deg, #ff6b6b22, #ee5a2422); color: var(--text); }
+        .msg.user .msg-bubble { background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: white; }
+        .msg-avatar { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .chat-input { display: flex; gap: 10px; }
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 25px;
+        }
+        .chat-send {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* BO'LIM 5: SHIFOXONALAR */
+        .hospitals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .hospital-card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        .hospital-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow);
+            border-color: var(--primary);
+        }
+        .hospital-icon { font-size: 36px; margin-bottom: 12px; }
+        .hospital-name { font-size: 16px; font-weight: bold; color: var(--text); margin-bottom: 8px; }
+        .hospital-info { font-size: 13px; color: #888; line-height: 1.6; }
+        .hospital-rating { color: #f9ca24; font-size: 14px; margin-top: 8px; }
+
+        /* FOOTER */
+        footer {
+            background: #1a1a2e;
+            color: #888;
+            text-align: center;
+            padding: 30px;
+            font-size: 14px;
+        }
+        footer span { color: var(--primary); }
+
+        /* DIVIDER */
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border: none;
+            margin: 0;
+        }
+
+        /* SCROLL */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="logo">Cardio<span>AI</span></div>
+    <ul class="nav-links">
+        <li><a href="#causes">Sabablar</a></li>
+        <li><a href="#test">Test</a></li>
+        <li><a href="#stats">Statistika</a></li>
+        <li><a href="#coach">Doctor Coach</a></li>
+        <li><a href="#hospitals">Shifoxonalar</a></li>
+    </ul>
+    <div class="nav-right">
+        <button class="lang-btn" onclick="toggleLang()">🌐 UZ</button>
+        <button class="dark-btn" onclick="toggleDark()">🌙</button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>❤️ CardioAI</h1>
+    <p>Sun'iy intellekt yordamida yurak sog'ligingizni tekshiring</p>
+    <div class="hero-btns">
+        <a href="#test" class="btn-white">🔍 Testni Boshlash</a>
+        <a href="#coach" class="btn-outline">🤖 Doctor Coach</a>
+    </div>
+</div>
+<hr class="section-divider">
+
+<!-- BO'LIM 1: SABABLAR -->
+<section id="causes">
+    <div class="section-title">⚠️ Yurak Kasalligiga Sabab Bo'luvchi Omillar</div>
+    <div class="section-sub">Eng ko'p uchraydigan 50 ta xavf omili</div>
+    <div class="causes-grid" id="causesGrid"></div>
+</section>
+<hr class="section-divider">
+
+<!-- BO'LIM 2: TEST -->
+<section id="test">
+    <div class="section-title">🔍 Yurak Sog'ligi Testi</div>
+    <div class="section-sub">Ma'lumotlaringizni kiriting — AI bashorat qiladi</div>
+    <div class="test-container">
+        <form action="/predict" method="POST">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>👤 Ism Familiya</label>
+                    <input type="text" name="name" placeholder="masalan: Abdulhay Hakimov" required>
+                </div>
+                <div class="form-group">
+                    <label>🎂 Yosh</label>
+                    <input type="number" name="age" placeholder="masalan: 45" required>
+                </div>
+                <div class="form-group">
+                    <label>👫 Jins</label>
+                    <select name="sex">
+                        <option value="1">Erkak</option>
+                        <option value="0">Ayol</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>💢 Ko'krak og'rig'i (0-3)</label>
+                    <input type="number" name="cp" min="0" max="3" placeholder="0-3" required>
+                </div>
+                <div class="form-group">
+                    <label>🩸 Qon bosimi</label>
+                    <input type="number" name="trestbps" placeholder="masalan: 120" required>
+                </div>
+                <div class="form-group">
+                    <label>🧪 Xolesterin</label>
+                    <input type="number" name="chol" placeholder="masalan: 200" required>
+                </div>
+                <div class="form-group">
+                    <label>🍬 Qand darajasi</label>
+                    <select name="fbs">
+                        <option value="0">Normal</option>
+                        <option value="1">Yuqori</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>📊 EKG natijasi (0-2)</label>
+                    <input type="number" name="restecg" min="0" max="2" placeholder="0-2" required>
+                </div>
+                <div class="form-group">
+                    <label>💓 Max yurak urishi</label>
+                    <input type="number" name="thalach" placeholder="masalan: 150" required>
+                </div>
+                <div class="form-group">
+                    <label>🏃 Mashq og'rig'i</label>
+                    <select name="exang">
+                        <option value="0">Yo'q</option>
+                        <option value="1">Bor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>📉 Oldpeak</label>
+                    <input type="number" name="oldpeak" step="0.1" placeholder="masalan: 1.0" required>
+                </div>
+                <div class="form-group">
+                    <label>📈 Slope (0-2)</label>
+                    <input type="number" name="slope" min="0" max="2" placeholder="0-2" required>
+                </div>
+                <div class="form-group">
+                    <label>🔬 Ca (0-4)</label>
+                    <input type="number" name="ca" min="0" max="4" placeholder="0-4" required>
+                </div>
+                <div class="form-group">
+                    <label>🫀 Thal (0-3)</label>
+                    <input type="number" name="thal" min="0" max="3" placeholder="0-3" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary">🔍 Bashorat Qilish</button>
+        </form>
+    </div>
+</section>
+<hr class="section-divider">
+
+<!-- BO'LIM 3: STATISTIKA -->
+<section id="stats">
+    <div class="section-title">📊 Statistika va Tarix</div>
+    <div class="section-sub">Modellar taqqoslash va tekshiruv tarixi</div>
+    <div class="stats-grid">
+        <div class="chart-card">
+            <h3>🤖 Modellar Taqqoslash</h3>
+            <img src="/static/model_chart.png" alt="Modellar">
+        </div>
+        <div class="chart-card">
+            <h3>🫀 Bemorlar Taqsimoti</h3>
+            <img src="/static/disease_chart.png" alt="Taqsimot">
+        </div>
+    </div>
+    <div class="chart-card" style="margin-top:25px;">
+        <h3>📋 So'nggi Tekshiruvlar</h3>
+        {% if history %}
+        <table class="history-table">
+            <thead>
+                <tr><th>#</th><th>Ism</th><th>Sana</th><th>Yosh</th><th>Natija</th><th>Xavf</th></tr>
+            </thead>
+            <tbody>
+                {% for item in history %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.ism }}</td>
+                    <td>{{ item.sana }}</td>
+                    <td>{{ item.yosh }}</td>
+                    <td>
+                        {% if item.natija == 'XAVF BOR' %}
+                            <span class="badge-danger">⚠️ Xavfli</span>
+                        {% else %}
+                            <span class="badge-safe">✅ Soglom</span>
+                        {% endif %}
+                    </td>
+                    <td><b>{{ item.xavf }}%</b></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color:#888; padding:20px;">Hali tekshiruv yo'q</p>
+        {% endif %}
+    </div>
+</section>
+<hr class="section-divider">
+
+<!-- BO'LIM 4: DOCTOR COACH -->
+<section id="coach">
+    <div class="section-title">🤖 Doctor Coach</div>
+    <div class="section-sub">Yurak kasalliklari bo'yicha AI shifokor maslahatchi</div>
+    <div class="coach-container">
+        <div class="chat-box" id="chatBox">
+            <div class="msg bot">
+                <div class="msg-avatar">🤖</div>
+                <div class="msg-bubble">Salom! Men CardioAI Doctor Coach — yurak kasalliklari bo'yicha maslahatchi. Savol bering! 😊</div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Savolingizni yozing..." onkeypress="if(event.key==='Enter') sendMsg()">
+            <button class="chat-send" onclick="sendMsg()">📤 Yuborish</button>
+        </div>
+    </div>
+</section>
+<hr class="section-divider">
+
+<!-- BO'LIM 5: SHIFOXONALAR -->
+<section id="hospitals">
+    <div class="section-title">🏥 Yurak Kasalliklari Shifoxonalari</div>
+    <div class="section-sub">O'zbekistondagi eng yaxshi kardiologiya markazlari</div>
+    <div class="hospitals-grid">
+        <div class="hospital-card">
+            <div class="hospital-icon">🏥</div>
+            <div class="hospital-name">Respublika Ixtisoslashtirilgan Kardiologiya Markazi</div>
+            <div class="hospital-info">📍 Toshkent, Mirzo Ulug'bek tumani<br>📞 +998 71 269-00-00<br>🕐 24/7 ishlaydi</div>
+            <div class="hospital-rating">⭐⭐⭐⭐⭐ 4.9</div>
+        </div>
+        <div class="hospital-card">
+            <div class="hospital-icon">❤️</div>
+            <div class="hospital-name">Toshkent Tibbiyot Akademiyasi Kardiologiya</div>
+            <div class="hospital-info">📍 Toshkent, Farobiy ko'chasi<br>📞 +998 71 214-52-14<br>🕐 Dush-Shan: 8:00-18:00</div>
+            <div class="hospital-rating">⭐⭐⭐⭐⭐ 4.8</div>
+        </div>
+        <div class="hospital-card">
+            <div class="hospital-icon">🫀</div>
+            <div class="hospital-name">Ibn Sino nomidagi RTMM</div>
+            <div class="hospital-info">📍 Toshkent, Yunusobod tumani<br>📞 +998 71 268-03-03<br>🕐 24/7 ishlaydi</div>
+            <div class="hospital-rating">⭐⭐⭐⭐⭐ 4.7</div>
+        </div>
+        <div class="hospital-card">
+            <div class="hospital-icon">🏨</div>
+            <div class="hospital-name">Samarqand Kardiologiya Markazi</div>
+            <div class="hospital-info">📍 Samarqand shahri<br>📞 +998 66 233-11-22<br>🕐 24/7 ishlaydi</div>
+            <div class="hospital-rating">⭐⭐⭐⭐ 4.6</div>
+        </div>
+        <div class="hospital-card">
+            <div class="hospital-icon">💊</div>
+            <div class="hospital-name">Andijon Viloyat Kardiologiya</div>
+            <div class="hospital-info">📍 Andijon shahri<br>📞 +998 74 223-45-67<br>🕐 24/7 ishlaydi</div>
+            <div class="hospital-rating">⭐⭐⭐⭐ 4.5</div>
+        </div>
+        <div class="hospital-card">
+            <div class="hospital-icon">🩺</div>
+            <div class="hospital-name">Namangan Kardiologiya Bo'limi</div>
+            <div class="hospital-info">📍 Namangan shahri<br>📞 +998 69 234-56-78<br>🕐 Dush-Shan: 8:00-20:00</div>
+            <div class="hospital-rating">⭐⭐⭐⭐ 4.4</div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>❤️ <span>CardioAI</span> — Sun'iy intellekt asosida yurak sog'ligi tizimi</p>
+    <p style="margin-top:8px;">© 2026 Barcha huquqlar himoyalangan</p>
+</footer>
+
+<script>
+// SABABLAR
+const causes = [
+    {icon:"🚬", name:"Chekish", facts:["🌍 Har yili 8 million kishi chekish tufayli halok bo'ladi","❤️ Chekish yurak xastaligi xavfini 2-4 barobarga oshiradi","🩸 Nikotin qon tomirlarini toraytiradi va qon bosimini oshiradi","📊 JSSTga ko'ra chekuvchilarning 50% yurak kasalligidan vafot etadi","⏱️ Chekishni tashlagan 1 yil ichida xavf 50% kamayadi"]},
+    {icon:"🍔", name:"Yog'li ovqat", facts:["🧈 To'yingan yog' xolesterinni oshirib, arteriyalarni berkitadi","📊 Kuniga 80g dan ortiq qizil go'sht iste'mol xavfni 22% oshiradi","🍟 Fast food mahsulotlari trans-yog' bilan to'la — eng xavflisi shu","🌍 Yog'li ovqat yurak kasalligining №1 sababi hisoblanadi","💊 To'g'ri ovqatlanish dorilardan ko'ra samaraliroq deb isbotlangan"]},
+    {icon:"😴", name:"Kam harakat", facts:["🏃 Kuniga 30 daqiqa yurish yurak xastaligi xavfini 35% kamaytiradi","📊 Harakatsiz odamlarda yurak xastaligi 2 barobar ko'p uchraydi","💪 Muntazam mashq qon bosimini 5-8 mmHg ga tushiradi","🌍 JSSTga ko'ra 1.4 milliard kishi yetarli harakat qilmaydi","⚡ Faqat 10 daqiqa yurish ham yurakka ijobiy ta'sir qiladi"]},
+    {icon:"😰", name:"Stress", facts:["🧠 Surunkali stress kortizol gormonini oshirib, yurakka zarar yetkazadi","📊 Stressli odamlarda yurak xurujlari 40% ko'p kuzatiladi","😤 G'azab va asabiylashish yurak urushini keskin tezlashtiradi","🌍 Ishdagi stress yurak kasalligini 23% oshirishi isbotlangan","🧘 Meditatsiya va nafas mashqlari stressni 30% kamaytiradi"]},
+    {icon:"🧬", name:"Irsiyat", facts:["👨‍👩‍👧 Ota-onada yurak kasalligi bo'lsa, xavf 40-60% ortadi","🔬 500 dan ortiq gen yurak kasalligiga ta'sir qilishi aniqlangan","📊 Erta yosh (erkak<55, ayol<65) da kasallik irsiy belgi","🧬 Genetik test orqali xavfni oldindan aniqlash mumkin","💡 Irsiyat bo'lsa ham, sog'lom hayot xavfni 50% kamaytiradi"]},
+    {icon:"🩸", name:"Yuqori bosim", facts:["📊 Dunyo aholisining 1.28 milliardi yuqori qon bosimidan aziyat chekadi","❤️ Yuqori bosim yurak xastaligi xavfini 3 barobarga oshiradi","🔴 140/90 dan yuqori bosim xavfli hisoblanadi","💊 Bosimni nazorat qilish insult xavfini 40% kamaytiradi","🧂 Kuniga 5g dan kam tuz iste'mol bosimni normallashtirishga yordam beradi"]},
+    {icon:"🍬", name:"Diabet", facts:["📊 Diabetli bemorlarning 68% yurak-qon tomir kasalligidan vafot etadi","🩸 Qon shakari yurak tomirlarini sekin-asta shikastlaydi","💉 2-tip diabet yurak xastaligi xavfini 2 barobarga oshiradi","🌍 Dunyo bo'yicha 537 million kishi diabetdan aziyat chekmoqda","🥗 To'g'ri ovqatlanish va harakat diabetni 58% oldini oladi"]},
+    {icon:"⚖️", name:"Semizlik", facts:["📊 BMI 30 dan yuqori bo'lsa yurak kasalligi xavfi 28% ortadi","❤️ Ortiqcha vazn yurakni qo'shimcha ish qilishga majbur qiladi","🌍 Dunyo bo'yicha 1 milliarddan ortiq kishi semirib ketgan","💪 Vaznning 5-10% ini yo'qotish qon bosimini sezilarli tushiradi","🍎 Meva-sabzavot ko'p iste'mol semizlikni 30% kamaytiradi"]},
+    {icon:"🍺", name:"Alkogol", facts:["📊 Haddan ortiq alkogol yurak kasalligini 1.5 barobarga oshiradi","❤️ Alkogol yurak mushaklarini zaiflashtiradi (kardiomiopatiya)","🌍 Har yili 3 million kishi alkogol tufayli hayotdan ko'z yumadi","🍷 Kuniga 1 stakanlik vino chegarasida ushlab turish tavsiya etiladi","🩺 Alkogolizm aritmiya va yurak yetishmovchiligini keltirib chiqaradi"]},
+    {icon:"😤", name:"G'azab", facts:["😡 G'azab holati yurak xurujlari xavfini 8.5 barobarga oshiradi","📊 G'azab 2 soat davomida yurak xurujlari xavfini yuqori tutadi","🧠 Doimiy g'azab stress gormonlarini oshirib, tomirlarni shikastlaydi","💆 Psixologik maslahat g'azabni boshqarishda 60% samarali","🧘 Chuqur nafas olish g'azab vaqtida yurakni himoya qiladi"]},
+    {icon:"💤", name:"Uyqusizlik", facts:["😴 Kuniga 6 soatdan kam uxlash yurak kasalligi xavfini 20% oshiradi","📊 Uyqusizlik qon bosimini va yallig'lanishni oshiradi","🌍 Dunyo aholisining 30% surunkali uyqusizlikdan aziyat chekadi","⏰ Optimal uyqu vaqti — kattalar uchun 7-9 soat","💤 Muntazam uyqu tartibi yurakni 25% yaxshiroq himoya qiladi"]},
+    {icon:"🧂", name:"Ko'p tuz", facts:["🧂 Dunyo aholisi tavsiya etilgan me'yordan 2 barobar ko'p tuz iste'mol qiladi","📊 Kuniga 5g dan ortiq tuz qon bosimini oshirib, yurakka zarar yetkazadi","❤️ Tuzni kamaytirish yurak kasalligi xavfini 17% tushiradi","🌍 JSSt kuniga 5g tuz chegarasini belgilagan","🍽️ Tayyor ovqatlarda yashirin tuz ko'p — etiketka o'qing"]},
+    {icon:"🫀", name:"Aritmiya", facts:["📊 Dunyo bo'yicha 37 million kishi aritmiyadan aziyat chekadi","❤️ Davolanmagan aritmiya insult va yurak yetishmovchiligiga olib keladi","🔬 EKG tekshiruvi aritmiyani erta aniqlashga yordam beradi","💊 Ko'p aritmiya turlari dori bilan muvaffaqiyatli davolanadi","⚡ Kofein va stress aritmiyani kuchaytirishi mumkin"]},
+    {icon:"🦠", name:"Yuqumli kasallik", facts:["🦠 Gripp va pnevmoniya yurak xurujlari xavfini 6 barobarga oshiradi","📊 COVID-19 yurak mushaklarini bevosita shikastlashi mumkin","❤️ Bakterial infeksiyalar yurak klapanlarini zararlashi mumkin","💉 Grippga qarshi emlash yurak kasalligi xavfini 36% kamaytiradi","🌡️ Yuqori isitma yurak urushini tezlashtiradi va zo'riqtiradi"]},
+    {icon:"💉", name:"Xolesterin", facts:["📊 Qondagi yuqori xolesterin arteriyalarda taxlitma hosil qiladi","❤️ LDL 'yomon' xolesterin yurak xastaligi xavfini oshiradi","🌍 Dunyo aholisining 39% xolesterin muammosiga ega","🥑 Omega-3 va sog'lom yog'lar xolesterinni muvozanatlaydi","💊 Statinlar xolesterinni 50% gacha kamaytirishi mumkin"]},
+    {icon:"🌡️", name:"Yallig'lanish", facts:["🔬 Surunkali yallig'lanish ateroskleroz (tomir berkitilishi) asosiy sababi","📊 C-reaktiv oqsil darajasi yurak xastaligi xavfini ko'rsatadi","❤️ Diş eti kasalligi yurak kasalligi xavfini 3 barobarga oshiradi","🫐 Antioksidantlar (ko'k mevalar) yallig'lanishni kamaytiradi","🧪 Qon tahlili orqali yallig'lanish darajasini aniqlash mumkin"]},
+    {icon:"🫁", name:"O'pka kasalligi", facts:["📊 COPD kasalligi yurak xastaligi xavfini 2-3 barobarga oshiradi","❤️ O'pkadagi muammo qonga kislorod yetkazilishini kamaytiradi","🌬️ Bronxial astma yurak mushaklariga qo'shimcha yuk tushiradi","🚭 Chekishni tashlash o'pka va yurakni bir vaqtda himoya qiladi","💨 Nafas mashqlari o'pka va yurak salomatligini yaxshilaydi"]},
+    {icon:"🧪", name:"Qon kasalligi", facts:["❤️ Kamqonlik (anemiya) yurakni ko'proq ishlashga majbur qiladi","📊 Og'ir anemiya yurak yetishmovchiligiga olib kelishi mumkin","🔬 Qon ivishi buzilishi tromboz va yurak xurujlarini keltirib chiqaradi","💊 Temir tanqisligi eng keng tarqalgan qon kasalligi turi","🥩 Temir boy ovqatlar: jigar, ko'k o'tlar, loviya"]},
+    {icon:"😮‍💨", name:"Apnea", facts:["📊 Uyku apneyasi yurak kasalligi xavfini 140% oshiradi","❤️ Tunda nafas to'xtashi qon bosimini keskin oshiradi","🌍 Dunyo bo'yicha 1 milliarddan ortiq kishi uyku apneyasiga ega","😴 Xurrak — uyku apneyasining asosiy belgisi","🩺 CPAP apparati apneyani davolashda 90% samarali"]},
+    {icon:"🏋️", name:"Ortiqcha mashq", facts:["📊 Haddan ortiq intensiv mashqlar yurak aritmiyasini keltirib chiqaradi","❤️ Marafon yuguruvchilarida yurak fibrozi aniqlangan hollar bor","⚠️ Steroid qo'llovchi sportchilar yurak kasalligiga moyilroq","💪 Optimal: haftada 150 daqiqa o'rtacha intensiv mashq","🏃 Ortiqcha emas, muntazam mashq — maqsad shu"]},
+    {icon:"☀️", name:"Issiqlik urishi", facts:["🌡️ +40°C dan yuqori havo yurak urushini tezlashtiradi","📊 Issiq ob-havo paytida yurak xurujlari 20% ko'payadi","❤️ Suvsizlanish qon qalinlashishiga va trombga olib keladi","💧 Issiqda kuniga 3 litr suv ichish tavsiya etiladi","🌬️ Issiq kunlarda kechqurun va ertaroq mashq qilish xavfsiz"]},
+    {icon:"❄️", name:"Sovuq", facts:["🌨️ Sovuq ob-havo qon tomirlarini toraytirib, bosimni oshiradi","📊 Qish oylarida yurak xurujlari 53% ko'proq kuzatiladi","❤️ Qor kürəmə kabi og'ir ish sovuqda yurakni zo'riqtiradi","🧥 Sovuqda ishliq kiyim kiyish yurakni himoya qiladi","🏠 -10°C dan past harakatlarga ehtiyotkorlik bilan yondashing"]},
+    {icon:"💊", name:"Dori ta'siri", facts:["⚠️ Ba'zi og'riq qoldiruvchilar (NSAIDs) yurak xavfini oshiradi","📊 Og'riq qoldiruvchilar yurak kasalligini 30-40% oshirishi mumkin","❤️ Noto'g'ri dori kombinatsiyasi aritmiyaga olib keladi","💉 Kimyoterapiya dorilarining ba'zilari yurakka zarar yetkazadi","🩺 Har qanday dori oldin shifokor bilan maslahatlashing"]},
+    {icon:"🤒", name:"Isitma", facts:["🌡️ Yuqori isitma yurak urushini daqiqasiga 10 marta tezlashtiradi","📊 39°C dan yuqori isitma yurak mushaklarini zo'riqtiradi","❤️ Surunkali past darajali isitma yashirin yallig'lanishni bildiradi","💊 Aspirinni shifokor ko'rsatmasisiz ichmang — yurakka ta'sir qiladi","🧊 Isitmani tushirish yurakdagi yuk va zo'riqishni kamaytiradi"]},
+    {icon:"🩻", name:"Tug'ma nuqson", facts:["📊 Har 100 boladan 1 tasi yurak nuqsoni bilan tug'iladi","❤️ Zamonaviy tibbiyot tug'ma yurak nuqsonlarining 90% ini davolaydi","🔬 Homiladorlikda ultratovush nuqsonni erta aniqlashga yordam beradi","👶 O'z vaqtida operatsiya qilinsa, bolalar to'liq sog'lom yashaydi","🧬 Genetik omillar va homiladorlikdagi infeksiyalar sabab bo'lishi mumkin"]},
+    {icon:"🧠", name:"Nevroz", facts:["📊 Nevrozli bemorlarda yurak kasalligi 2 barobar ko'p uchraydi","❤️ Doimiy tashvish va qo'rquv stress gormonlarini oshiradi","🧠 Panik atakalar yurak xurujiga o'xshash belgilar beradi","💆 Psixoterapiya nevrozni 70% hollarda muvaffaqiyatli davolaydi","🌿 Tabiat, ijtimoiylashuv va sport nevroz bilan kurashishda yordam beradi"]},
+    {icon:"😷", name:"Viruslar", facts:["🦠 Ba'zi viruslar (enterovirus) yurak mushaklarini shikastlashi mumkin","📊 Miokarditis — virusli yurak yallig'lanishi ko'pincha yoshlarda uchraydi","❤️ COVID-19 yurak mushaklarida uzoq muddatli asorat qoldirishi mumkin","💉 Emlash virusli kasalliklardan va ularning yurak asoratlaridan himoyalaydi","🩺 Virusdan so'ng yurak tekshiruvi o'tkazish tavsiya etiladi"]},
+    {icon:"🍕", name:"Ko'p kalori", facts:["📊 Kunlik normadan 500 kkal ortiq iste'mol vazn ortishiga olib keladi","❤️ Ortiqcha kaloriya qon yog'larini oshirib, tomirlarni berkitadi","🍰 Qand va un mahsulotlari eng tez kaloriya beruvchi oziqlar","📱 Kalori hisoblash ilovalari ovqatlanishni 40% yaxshilaydi","🥗 Kaloriyani emas, ozuqaviy qiymatni e'tiborga oling"]},
+    {icon:"🥤", name:"Gazli ichimlik", facts:["📊 Kuniga 1 litr gazli ichimlik yurak xastaligi xavfini 20% oshiradi","❤️ Ko'p qand qon shakarini oshirib, diabetga va yurak kasalligiga olib keladi","🧪 Diet ichimliklar ham yurak ritmi buzilishiga bog'liq","🌍 Amerikada yurak kasalliklarining 10% gazli ichimliklardan keladi deb hisoblanadi","💧 Gazli o'rniga limon suvi qo'shilgan oddiy suv iching"]},
+    {icon:"🚗", name:"Ifloslanish", facts:["🌫️ Havo ifloslanishi yurak kasalligi sabablarining 16% ini tashkil qiladi","📊 PM2.5 zarrachalar qon tomirlariga kirib yallig'lanish qo'zg'atadi","❤️ Shovqin ifloslanishi ham qon bosimini oshiradi","🌍 Yiliga 7 million kishi havo ifloslanishi tufayli vafot etadi","🌳 Ko'chalar bo'ylab daraxt ekish shahar havosinini 25% yaxshilaydi"]},
+    {icon:"📱", name:"Ko'p ekran", facts:["📊 Kuniga 6 soatdan ortiq o'tirish yurak xastaligi xavfini 34% oshiradi","❤️ Ekran ko'p ko'rish uyquни buzib, stress va yallig'lanishni oshiradi","😴 Yotishdan 1 soat oldin ekrandan uzoqlashish uyqu sifatini yaxshilaydi","🏃 Har 30 daqiqada 5 daqiqa turib harakat qilish tavsiya etiladi","👁️ Ko'p ekran ko'z va yurak salomatligiga bir vaqtda zarar yetkazadi"]},
+    {icon:"🎰", name:"Qimor stressi", facts:["😰 Qimordagi stress va hayajon yurak urushini 160% gacha tezlashtiradi","📊 Qimorbozlarda yurak xurujlari ko'proq kuzatilgan","❤️ Yutqazish havotiri kuchli adrenalin chiqarib, yurakni zo'riqtiradi","💸 Moliyaviy stress yurak kasalligining yashirin sababi hisoblanadi","🆘 Qimor muammosi bo'lsa, psixologga murojaat qiling"]},
+    {icon:"💸", name:"Moliy stress", facts:["📊 Kambag'allik va qarz yurak kasalligi xavfini 2 barobarga oshiradi","❤️ Moliy tashvish surunkali stress holatini keltirib chiqaradi","🧠 Iqtisodiy inqirozlar davrida yurak kasalligi o'limi ko'payadi","💡 Moliy savodxonlik stress darajasini sezilarli kamaytiradi","🤝 Yaqinlar bilan muammoни ulashish yukni yengillashtiradi"]},
+    {icon:"👨‍👩‍👧", name:"Oilaviy stress", facts:["📊 Oiladagi ziddiyatlar yurak kasalligi xavfini 34% oshiradi","❤️ Ajralish va yaqinni yo'qotish yurak xurujlari xavfini oshiradi","🧠 'Singan yurak sindromu' — kuchli hissiy zarba yurak xurujini keltirib chiqaradi","💑 Baxtli oilaviy hayot yurak salomatligini 22% yaxshilaydi","🤗 Yaqinlar qo'llab-quvvatlashi davolashda muhim rol o'ynaydi"]},
+    {icon:"🌪️", name:"Ob-havo", facts:["❄️ Harorat keskin o'zgarishi yurak urushini buzadi","📊 Qish oylarida yurak xurujlari 40% ko'payadi","🌩️ Magnit bo'ronlari ba'zi bemorlarda yurak ritmini buzishi kuzatilgan","☀️ D vitamini kamchilligi (quyosh yetishmasligi) yurak kasalligini oshiradi","🌡️ Harorat o'zgarishida dori vaqtini o'tkazib yubormaslik muhim"]},
+    {icon:"🦷", name:"Tish kasalligi", facts:["📊 Paradontoz yurak kasalligi xavfini 3 barobarga oshiradi","❤️ Og'iz bakteriyalari qon orqali yurak klapanlarini zararlashi mumkin","🦠 Streptococcus bakteriyasi tishdan yurakka o'tishi mumkin","🪥 Kuniga 2 marta tish yuvish yurak kasalligi xavfini kamaytiradi","🩺 Yiliga 2 marta stomatologga borish yurak uchun ham muhim"]},
+    {icon:"🛋️", name:"O'tirish kasali", facts:["📊 Kuniga 8 soatdan ortiq o'tirish yurak kasalligi xavfini 90% oshiradi","❤️ Uzoq o'tirish qon aylanishini sekinlashtiradi","🌍 Zamonaviy ofis hayoti eng katta yurak xavf omillaridan biri","💻 Standing desk — turgan holda ishlash yangi trend va foydali","⏰ Har 30 daqiqada turib 2-3 daqiqa yurish tavsiya etiladi"]},
+    {icon:"🧊", name:"Sovuq suv", facts:["❄️ Juda sovuq suv birdan ichish yurak urushini sekinlashtirishi mumkin","📊 Sovuq dush qon bosimini vaqtincha oshiradi","❤️ Sovuq suvda cho'milish yurak aritmiyasini qo'zg'atishi mumkin","🌡️ Yurak kasalligi bo'lganlar ekstremal sovuq suvdan saqlangan yaxshi","☕ Issiq choy yurak salomatligiga foydaliroq deb hisoblanadi"]},
+    {icon:"🌶️", name:"O'tkir ovqat", facts:["📊 Haddan ortiq o'tkir ovqat reflüks va yurak yonishini keltirib chiqaradi","❤️ Kapsaisin modda qon bosimini vaqtincha oshiradi","🌶️ Ammo mo'tadil o'tkir ovqat qon aylanishini yaxshilaydi","🔬 Tadqiqotlar ko'rsatadiki o'tkir ovqat xolesterinni kamaytirishi mumkin","🍛 Haddan ortiq emas, me'yorida iste'mol qilish foydali"]},
+    {icon:"🫃", name:"Homiladorlik", facts:["📊 Homiladorlik toksikozi yurak kasalligi xavfini 4 barobarga oshiradi","❤️ Gestatsion diabet keyinchalik yurak kasalligiga olib kelishi mumkin","🤰 Homiladorlik davridagi qon bosimi kuzatib borilishi shart","👶 Ko'p bola ko'rgan ayollarda yurak kasalligi ko'proq kuzatilgan","🩺 Homiladorlikdan keyin yurak tekshiruvi o'tkazish tavsiya etiladi"]},
+    {icon:"👴", name:"Keksalik", facts:["📊 65 yoshdan keyin yurak kasalligi xavfi har 10 yilda 2 barobar oshadi","❤️ Keksalikda yurak mushaklari qotib, elastikligini yo'qotadi","🌍 Yurak kasalligidan o'limlarning 80% 65 yoshdan oshganlar orasida","💊 Keksalarda ko'p dori qabul qilish yurak ritmini buzishi mumkin","🏃 Faol keksalik — eng yaxshi yurak himoyasi"]},
+    {icon:"🏭", name:"Zavodda ishlash", facts:["⚗️ Kimyoviy moddalar (asbest, qo'rg'oshin) yurak kasalligini oshiradi","📊 Shovqinli ish joylari qon bosimini 5-10 mmHg ga oshiradi","❤️ Tungi smenada ishlaш yurak kasalligi xavfini 40% oshiradi","🌫️ Changlik muhit o'pka orqali yurakka ham ta'sir qiladi","🦺 Himoya vositalari va dam olishga rioya qilish shart"]},
+    {icon:"🚀", name:"Yuqori balandlik", facts:["⛰️ 2500m dan yuqori balandlikda kislorod kamayib, yurak ko'proq ishlaydi","📊 Tog'li hududlarda yashovchilarda ba'zi yurak kasalliklari kam uchraydi","❤️ Yurak kasalligi bo'lganlar tog'ga chiqishdan oldin shifokorga borsin","✈️ Samolyotda ham bosim o'zgarishi yurakka ta'sir qilishi mumkin","🏔️ Asta-sekin akklimatizatsiya yurak zo'riqishini kamaytiradi"]},
+    {icon:"🎯", name:"Perfektsionizm", facts:["📊 Perfeksionistlarda surunkali stress va yurak kasalligi ko'proq","❤️ Maqsadga erishmaslik tashvishi adrenalinni oshirib, yurakni zo'riqtiradi","🧠 'A tipi' shaxslar (tajovuzkor, shoshqaloq) yurak kasalligiga moyilroq","💆 O'zini qabul qilish va moslashuvchanlik yurak salomatligini yaxshilaydi","📖 Psixologik yordam perfeksionizm bilan kurashishda samarali"]},
+    {icon:"📺", name:"Passiv hayot", facts:["📊 TV ko'rish har soati uchun yurak kasalligi xavfi 7% ortadi","❤️ Passiv hayot metabolizmni sekinlashtiradi va yog' to'planishiga olib keladi","🌍 O'troq turmush tarzi yurak kasalligining 6% ini tashkil qiladi","🏃 Kuniga 1 soat yurish passiv hayotning zararini 50% kamaytiradi","🎮 O'yin va TV o'rniga faol dam olish turlarini tanlang"]},
+    {icon:"🦴", name:"Suyak kasalligi", facts:["📊 Osteoporoz va yurak kasalligi ko'pincha birga uchraydi","❤️ Kalsiy almashinuvi buzilishi ham suyak ham yurakka ta'sir qiladi","💊 Ba'zi osteoporoz dorilar yurak ritmiga ta'sir qilishi mumkin","🥛 Kalsiy va D vitamin suyak va yurak salomatligini birga qo'llab-quvvatlaydi","🏃 Yukli mashqlar suyak va yurak mushaklarini birga mustahkamlaydi"]},
+    {icon:"🩺", name:"Kech diagnostika", facts:["📊 Yurak kasalliklarining 50% o'z vaqtida aniqlanmaydi","❤️ Erta aniqlash davolanish samaradorligini 80% ga oshiradi","🌍 Profilaktik tekshiruvlar yurak o'limini 30% kamaytirishi isbotlangan","📋 40 yoshdan keyin yiliga 1 marta kardiologga borish tavsiya etiladi","🩺 Og'riq bo'lmasa ham tekshiruv o'tkazing — kasallik yashirin kechishi mumkin"]},
+    {icon:"🫶", name:"Yolg'izlik", facts:["📊 Yolg'izlik yurak kasalligi xavfini 29% oshiradi","❤️ Ijtimoiy aloqalar yurak salomatligini sigaret tashlagandek yaxshilaydi","🧠 Yolg'izlik depressiya va stress orqali yurakka zarar yetkazadi","🌍 Zamonaviy jamiyatda yolg'izlik epidemiyasi kuchaymoqda","🤝 Jamoat faoliyati va do'stlar bilan muloqot umrni uzaytiradi"]},
+    {icon:"😢", name:"Depressiya", facts:["📊 Depressiyali bemorlarda yurak kasalligi 2 barobar ko'p uchraydi","❤️ Depressiya yallig'lanish gormonlarini oshirib, tomirlarni shikastlaydi","🧠 Yurak xurujidan keyin depressiya 30% bemorlarda kuzatiladi","💊 Antidepressantlar ba'zida yurak ritmiga ta'sir qilishi mumkin","🌟 Muolaja va ijtimoiy qo'llab-quvvatlash depressiyani 60% kamaytiradi"]},
+    {icon:"🔋", name:"Charchoq", facts:["😓 Surunkali charchoq yurak kasalligining erta belgisi bo'lishi mumkin","📊 Yurak yetishmovchiligida charchoq eng keng tarqalgan belgi","❤️ Tez charchash qon aylanish tizimidagi muammoni bildirishi mumkin","💤 Sifatli uyqu va dam olish charchoqni 50% kamaytiradi","🩺 Tushuntirib bo'lmaydigan charchoq bo'lsa shifokorga boring"]}
+];
+
+function showModal(i) {
+    const c = causes[i];
+    document.getElementById('modalTitle').textContent = c.icon + ' ' + c.name;
+    const list = c.facts.map(f => `<li style="padding:8px 0;border-bottom:1px solid #eee;font-size:14px">${f}</li>`).join('');
+    document.getElementById('modalFacts').innerHTML = `<ul style="list-style:none">${list}</ul>`;
+    document.getElementById('modal').style.display = 'flex';
+}
+
+const grid = document.getElementById('causesGrid');
+causes.forEach((c, i) => {
+    const div = document.createElement("div");
+    div.className = "cause-card";
+    div.style.cursor = "pointer";
+    div.innerHTML = `
+        <div class="cause-icon">${c.icon}</div>
+        <div class="cause-num">#${i+1}</div>
+        <div class="cause-name">${c.name}</div>
+    `;
+    div.addEventListener("click", () => showModal(i));
+    grid.appendChild(div);
+});
+
+// DARK MODE
+function toggleDark() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.querySelector('.dark-btn').textContent = isDark ? '🌙' : '☀️';
+}
+
+// LANG
+const langs = ['UZ', 'RU', 'EN'];
+let langIdx = 0;
+function toggleLang() {
+    langIdx = (langIdx + 1) % langs.length;
+    document.querySelector('.lang-btn').textContent = '🌐 ' + langs[langIdx];
+}
+
+// DOCTOR COACH
+async function sendMsg() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const box = document.getElementById('chatBox');
+    box.innerHTML += `<div class="msg user"><div class="msg-avatar">👤</div><div class="msg-bubble">${msg}</div></div>`;
+    input.value = '';
+    box.scrollTop = box.scrollHeight;
+
+    box.innerHTML += `<div class="msg bot" id="typing"><div class="msg-avatar">🤖</div><div class="msg-bubble">⏳ Javob yozilmoqda...</div></div>`;
+    box.scrollTop = box.scrollHeight;
+
+    try {
+        const res = await fetch('/coach', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({message: msg})
+        });
+        const data = await res.json();
+        document.getElementById('typing').remove();
+        box.innerHTML += `<div class="msg bot"><div class="msg-avatar">🤖</div><div class="msg-bubble">${data.reply}</div></div>`;
+    } catch {
+        document.getElementById('typing').remove();
+        box.innerHTML += `<div class="msg bot"><div class="msg-avatar">🤖</div><div class="msg-bubble">Xatolik yuz berdi. Qayta urining.</div></div>`;
+    }
+    box.scrollTop = box.scrollHeight;
+}
+</script>
+<div id="modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+    <div style="background:var(--card);color:var(--text);border-radius:20px;padding:35px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+            <h2 id="modalTitle" style="color:#ee5a24;font-size:20px"></h2>
+            <button onclick="document.getElementById('modal').style.display='none'" style="background:none;border:none;font-size:24px;cursor:pointer;color:#888">✕</button>
+        </div>
+        <div id="modalFacts"></div>
+    </div>
+</div>
+</body>
+</html>

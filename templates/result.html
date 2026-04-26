@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natija - CardioAI</title>
+    <style>
+        :root {
+            --bg: #ffffff; --text: #333333; --card: #f9f9f9;
+            --border: #eeeeee; --primary: #ee5a24; --nav-bg: #ffffff;
+            --shadow: rgba(0,0,0,0.1);
+        }
+        [data-theme="dark"] {
+            --bg: #1a1a2e; --text: #e0e0e0; --card: #16213e;
+            --border: #0f3460; --nav-bg: #16213e; --shadow: rgba(0,0,0,0.4);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); transition: all 0.3s; }
+
+        nav {
+            background: var(--nav-bg); padding: 15px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 20px var(--shadow); position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-size: 24px; font-weight: bold; color: var(--primary); }
+        .logo span { color: var(--text); }
+        .dark-btn {
+            padding: 6px 14px; border: 2px solid var(--primary);
+            border-radius: 20px; background: transparent; color: var(--text);
+            cursor: pointer; font-size: 13px; font-weight: 600;
+        }
+        .dark-btn:hover { background: var(--primary); color: white; }
+
+        .page { max-width: 700px; margin: 40px auto; padding: 0 20px; }
+
+        /* XAVF FOIZI */
+        .risk-card {
+            border-radius: 20px; padding: 40px;
+            text-align: center; margin-bottom: 25px;
+            box-shadow: 0 10px 40px var(--shadow);
+        }
+        .risk-danger { background: linear-gradient(135deg, #ff6b6b22, #ee5a2411); border: 3px solid #c0392b; }
+        .risk-warning { background: linear-gradient(135deg, #f9ca2422, #f0932b11); border: 3px solid #f0932b; }
+        .risk-medium { background: linear-gradient(135deg, #f9ca2422, #ffd32a11); border: 3px solid #ffd32a; }
+        .risk-safe { background: linear-gradient(135deg, #6ab04c22, #badc5811); border: 3px solid #27ae60; }
+
+        .patient-name { font-size: 16px; color: #888; margin-bottom: 15px; }
+        .risk-circle {
+            width: 150px; height: 150px; border-radius: 50%;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; margin: 0 auto 20px;
+            font-size: 42px; font-weight: bold;
+        }
+        .circle-danger { background: #ffe0e0; color: #c0392b; border: 6px solid #c0392b; }
+        .circle-warning { background: #fff3cd; color: #f0932b; border: 6px solid #f0932b; }
+        .circle-medium { background: #fffde7; color: #f9a825; border: 6px solid #ffd32a; }
+        .circle-safe { background: #e0ffe0; color: #27ae60; border: 6px solid #27ae60; }
+
+        .risk-label { font-size: 11px; font-weight: normal; margin-top: 3px; }
+        .risk-title { font-size: 24px; font-weight: bold; margin-bottom: 8px; }
+        .risk-sub { font-size: 14px; color: #888; }
+
+        /* PROGRESS BAR */
+        .progress-wrap { background: #eee; border-radius: 20px; height: 12px; margin: 20px 0; overflow: hidden; }
+        .progress-bar { height: 100%; border-radius: 20px; transition: width 1s ease; }
+        .bar-danger { background: linear-gradient(90deg, #ff6b6b, #c0392b); }
+        .bar-warning { background: linear-gradient(90deg, #f9ca24, #f0932b); }
+        .bar-medium { background: linear-gradient(90deg, #ffd32a, #f9ca24); }
+        .bar-safe { background: linear-gradient(90deg, #6ab04c, #27ae60); }
+
+        /* TAVSIYALAR */
+        .advice-card {
+            background: var(--card); border-radius: 15px; padding: 25px;
+            margin-bottom: 20px; box-shadow: 0 5px 20px var(--shadow);
+        }
+        .advice-card h3 { color: var(--primary); margin-bottom: 15px; font-size: 16px; }
+        .advice-list { list-style: none; }
+        .advice-list li {
+            padding: 10px 0; border-bottom: 1px solid var(--border);
+            font-size: 14px; line-height: 1.5;
+        }
+        .advice-list li:last-child { border-bottom: none; }
+
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .info-box {
+            background: var(--card); border-radius: 12px; padding: 18px;
+            border-left: 4px solid var(--primary);
+        }
+        .info-box h4 { color: var(--primary); font-size: 13px; margin-bottom: 8px; }
+        .info-box p { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+        /* MA'LUMOTLAR */
+        .details-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .detail-item {
+            background: var(--card); border-radius: 10px; padding: 12px;
+            text-align: center; border: 1px solid var(--border);
+        }
+        .detail-label { font-size: 10px; color: #888; }
+        .detail-value { font-size: 18px; font-weight: bold; color: var(--primary); }
+
+        /* TUGMALAR */
+        .buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn {
+            flex: 1; padding: 14px; border: none; border-radius: 12px;
+            font-size: 15px; cursor: pointer; text-align: center;
+            text-decoration: none; font-weight: bold; transition: all 0.3s;
+            min-width: 140px;
+        }
+        .btn-primary { background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: white; }
+        .btn-secondary { background: var(--card); color: var(--text); border: 2px solid var(--border); }
+        .btn-pdf { background: linear-gradient(135deg, #6ab04c, #27ae60); color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--shadow); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Cardio<span>AI</span></div>
+    <button class="dark-btn" onclick="toggleDark()">🌙</button>
+</nav>
+
+<div class="page">
+
+    <!-- XAVF KARTASI -->
+    <div class="risk-card risk-{{ advice.rang }}">
+        <div class="patient-name">👤 {{ name }} — Tekshiruv natijasi</div>
+
+        <div class="risk-circle circle-{{ advice.rang }}">
+            {{ risk }}%
+            <div class="risk-label">xavf</div>
+        </div>
+
+        <div class="risk-title">
+            {% if advice.rang == 'danger' %} ⚠️ JUDA YUQORI XAVF
+            {% elif advice.rang == 'warning' %} 🔶 YUQORI XAVF
+            {% elif advice.rang == 'medium' %} 🟡 O'RTA XAVF
+            {% else %} ✅ PAST XAVF — SOGLOM
+            {% endif %}
+        </div>
+        <div class="risk-sub">Model aniqligi: {{ accuracy }}%</div>
+
+        <div class="progress-wrap">
+            <div class="progress-bar bar-{{ advice.rang }}" style="width: {{ risk }}%"></div>
+        </div>
+    </div>
+
+    <!-- KIRITILGAN MA'LUMOTLAR -->
+    <div class="advice-card">
+        <h3>📋 Kiritilgan Ma'lumotlar</h3>
+        <div class="details-grid">
+            <div class="detail-item">
+                <div class="detail-label">Yosh</div>
+                <div class="detail-value">{{ features.age | int }}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Jins</div>
+                <div class="detail-value">{% if features.sex == 1.0 %}👨{% else %}👩{% endif %}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Qon bosimi</div>
+                <div class="detail-value">{{ features.trestbps | int }}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Xolesterin</div>
+                <div class="detail-value">{{ features.chol | int }}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Yurak urishi</div>
+                <div class="detail-value">{{ features.thalach | int }}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Oldpeak</div>
+                <div class="detail-value">{{ features.oldpeak }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAVSIYALAR -->
+    <div class="advice-card">
+        <h3>💡 Tavsiyalar</h3>
+        <ul class="advice-list">
+            {% for t in advice.tavsiya %}
+            <li>{{ t }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- OPERATSIYA VA DORILAR -->
+    <div class="info-grid">
+        <div class="info-box">
+            <h4>🏥 Operatsiya haqida</h4>
+            <p>{{ advice.operatsiya }}</p>
+        </div>
+        <div class="info-box">
+            <h4>💊 Dori tavsiyalari</h4>
+            <p>{{ advice.dorilar }}</p>
+        </div>
+    </div>
+
+    <!-- TUGMALAR -->
+    <div class="buttons">
+        <a href="/" class="btn btn-primary">🔄 Qayta tekshirish</a>
+        <a href="/#stats" class="btn btn-secondary">📊 Statistika</a>
+        <button onclick="window.print()" class="btn btn-pdf">🖨️ PDF saqlash</button>
+    </div>
+</div>
+
+<script>
+function toggleDark() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.querySelector('.dark-btn').textContent = isDark ? '🌙' : '☀️';
+}
+</script>
+</body>
+</html>
